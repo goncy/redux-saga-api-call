@@ -82,7 +82,7 @@ npm install --save redux-saga-api-call
 yarn test
 // jest coverage
 yarn cover
-
+```
 
 ## Contributors
 Simply create a pull request :)
