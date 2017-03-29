@@ -1,0 +1,40 @@
+{
+  "name": "redux-saga-api-call",
+  "version": "0.0.1",
+  "description": "Simple api call for Redux Saga",
+  "main": "dist/redux-saga-api-call.js",
+  "module": "dist/redux-saga-api-call.mjs",
+  "jsnext:main": "dist/redux-saga-api-call.mjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goncy/redux-saga-api-call"
+  },
+  "author": "goncy",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "keywords": [
+    "redux",
+    "saga",
+    "api",
+    "call",
+    "simple"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-latest": "^6.24.0",
+    "babelrc-rollup": "^3.0.0",
+    "coveralls": "^2.12.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1"
+  },
+  "dependencies": {
+    "redux-saga": "^0.14.4"
+  }
+}

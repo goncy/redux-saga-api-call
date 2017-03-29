@@ -1,0 +1,17 @@
+{
+  "env": {
+    "testing": {
+      "presets": ["es2015"]
+    },
+    "development": {
+      "presets": [
+        ["latest", {
+          "es2015": {
+            "modules": false
+          }
+        }]
+      ],
+      "plugins": ["external-helpers", "transform-runtime"]
+    }
+  }
+}
