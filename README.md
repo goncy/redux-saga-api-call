@@ -1,5 +1,6 @@
 # Redux Saga api call (`redux-saga-api-call`)
 [![Build Status](https://travis-ci.org/goncy/redux-saga-api-call.svg?branch=master)](https://travis-ci.org/goncy/redux-saga-api-call)
+[![Coverage Status](https://coveralls.io/repos/github/goncy/redux-saga-api-call/badge.svg?branch=master)](https://coveralls.io/github/goncy/redux-saga-api-call?branch=master)
 
 Simple api call for Redux Saga
 
@@ -23,7 +24,7 @@ Call the method like this:
 `apiCall(apiMethod, options)`
 ~`apiMethod` should be a thenable object~
 
-* `transformPayload`: A function that receives the Redux state, then the `apiMethod` will receive a merged object between this selectors and the action payload
+* `select`: A function that receives the Redux state, then the `apiMethod` will receive a merged object between this selectors and the action payload
 * `transformResponse`: Once the `apiMethod` resolved, the response will be piped through this function and the result will be dispatched as `{ACTION_NAME}_SUCCESS` (If this is not present, the raw result will be dispatched instead)
 * `transformError`: Once the `apiMethod` rejected, the error will be piped through this function and the result will be dispatched as `{ACTION_NAME}_FAILURE` (If this is not present, the raw error will be dispatched instead)
 
