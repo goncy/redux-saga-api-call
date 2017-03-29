@@ -69,6 +69,13 @@ yarn add redux-saga-api-call
 npm install --save redux-saga-api-call
 ```
 
+## Tests
+```sh
+// jest tests
+yarn test
+// jest coverage
+yarn cover
+
 
 ## Contributors
 Simply create a pull request :)
