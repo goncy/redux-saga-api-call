@@ -5,87 +5,88 @@ import { call, put, select } from 'redux-saga/effects';
 /**
  * Retrieves data from a passed selector and dispatch an START action with that information, then calls the api with the information merged with the payload, if the api call succedded, dispatches a SUCCESS action with the response on the payload, otherwise, dispatches a FAILURE action with the error
  * @param {function} apiMethod
- * @param {function} selector
+ * @param {object} options
  * @return {function} generator function that receives the action from the saga
  */
-function apiSaga(apiMethod, options) {
-  var transformPayload = options.transformPayload,
+function apiSaga(apiMethod) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var selectFromState = options.selectFromState,
       transformResponse = options.transformResponse,
       transformError = options.transformError;
 
   return _regeneratorRuntime.mark(function apiSagaResponse(action) {
-    var selectedData, result;
+    var selectedData, _ref, response, error;
+
     return _regeneratorRuntime.wrap(function apiSagaResponse$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (action) {
-              _context.next = 2;
+            if (!selectFromState) {
+              _context.next = 6;
               break;
             }
 
-            return _context.abrupt('return');
+            _context.next = 3;
+            return select(selectFromState);
 
-          case 2:
-            if (!transformPayload) {
-              _context.next = 8;
-              break;
-            }
-
-            _context.next = 5;
-            return select(transformPayload);
-
-          case 5:
+          case 3:
             _context.t0 = _context.sent;
-            _context.next = 9;
+            _context.next = 7;
             break;
 
-          case 8:
+          case 6:
             _context.t0 = {};
 
-          case 9:
+          case 7:
             selectedData = _context.t0;
-            _context.next = 12;
+            _context.next = 10;
             return put({
               type: action.type + '_START',
               payload: action.payload,
               selectedData: selectedData
             });
 
-          case 12:
-            _context.prev = 12;
-            _context.next = 15;
-            return call(apiMethod, _Object$assign({}, selectedData, action.payload));
+          case 10:
+            _context.next = 12;
+            return call(apiMethod, _Object$assign({}, {
+              selectedData: selectedData
+            }, {
+              payload: action.payload
+            }));
 
-          case 15:
-            result = _context.sent;
+          case 12:
+            _ref = _context.sent;
+            response = _ref.response;
+            error = _ref.error;
+
+            if (!response) {
+              _context.next = 20;
+              break;
+            }
+
             _context.next = 18;
             return put({
               type: action.type + '_SUCCESS',
-              payload: transformResponse ? transformResponse(result) : result
+              payload: transformResponse ? transformResponse(response) : response
             });
 
           case 18:
-            return _context.abrupt('return', _context.sent);
+            _context.next = 22;
+            break;
 
-          case 21:
-            _context.prev = 21;
-            _context.t1 = _context['catch'](12);
-            _context.next = 25;
+          case 20:
+            _context.next = 22;
             return put({
               type: action.type + '_FAILURE',
-              payload: transformError ? transformError(_context.t1) : _context.t1
+              payload: transformError ? transformError(error) : error
             });
 
-          case 25:
-            return _context.abrupt('return', _context.sent);
-
-          case 26:
+          case 22:
           case 'end':
             return _context.stop();
         }
       }
-    }, apiSagaResponse, this, [[12, 21]]);
+    }, apiSagaResponse, this);
   });
 }
 
