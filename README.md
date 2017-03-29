@@ -13,6 +13,13 @@ Redux Saga api call is a simple method to simplify api calls, instead of calling
 ```js
 import apiCall from 'redux-saga-api-call'
 
+// Api method
+const fetchJokeApi = () => fetch(API_URL)
+  .then(response => response.json())
+  .then(response => ({response}))
+  .catch(error => ({error}))
+// -> ATTENTION: It's very important to wrap the response and error in objects called response and error, because the call will destructure the response to identify if the call was successfull or not (If you find a way to improve it, please, make a pull request)
+
 // Simplest case
 function* fetchJokeWatcher () {
   yield takeEvery(fetchJoke.type, apiSaga(fetchJokeApi))
