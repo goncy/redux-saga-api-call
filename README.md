@@ -28,7 +28,7 @@ function* fetchJokeWatcher () {
 // Select data from state and send it to apiMethod
 function* fetchJokeWatcher () {
   yield takeEvery(
-    fetchJoke.type,
+    'FETCH_JOKE',
     apiSaga(
       fetchJokeApi,
       {
@@ -42,7 +42,7 @@ function* fetchJokeWatcher () {
 // Transform response and error data
 function* fetchJokeWatcher () {
   yield takeEvery(
-    fetchJoke.type,
+    'FETCH_JOKE',
     apiSaga(
       fetchJokeApi,
       {
