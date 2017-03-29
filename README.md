@@ -17,14 +17,44 @@ import apiCall from 'redux-saga-api-call'
 function* fetchJokeWatcher () {
   yield takeEvery(fetchJoke.type, apiSaga(fetchJokeApi))
 }
+
+// Select data from state and send it to apiMethod
+function* fetchJokeWatcher () {
+  yield takeEvery(
+    fetchJoke.type,
+    apiSaga(
+      fetchJokeApi,
+      {
+        selectFromState: state => state.userPreferences
+      }
+    )
+  )
+}
+// -> fetchJokeApi({payload: <payload sent to action>, selectedData: <userPreferences>)
+
+// Transform response and error data
+function* fetchJokeWatcher () {
+  yield takeEvery(
+    fetchJoke.type,
+    apiSaga(
+      fetchJokeApi,
+      {
+        transformResponse: response => response.filter(joke => !joke.includes('Bruce lee')),
+        transformError: error => `Error: ${error}`
+      }
+    )
+  )
+}
+// -> {type: 'FETCH_JOKE_SUCCESS', payload: <All jokes that doesn't include 'Bruce lee' on it>}
+// -> {type: 'FETCH_JOKE_FAILURE', payload: 'Error: <the error that the server returned>'}
 ```
 
 ### Options
 Call the method like this:
 `apiCall(apiMethod, options)`
-~`apiMethod` should be a thenable object~
+_`apiMethod` should be a thenable object_
 
-* `select`: A function that receives the Redux state, then the `apiMethod` will receive a merged object between this selectors and the action payload
+* `selectFromState`: A function that receives the Redux state, then the `apiMethod` will receive a merged object between this selectors and the action payload
 * `transformResponse`: Once the `apiMethod` resolved, the response will be piped through this function and the result will be dispatched as `{ACTION_NAME}_SUCCESS` (If this is not present, the raw result will be dispatched instead)
 * `transformError`: Once the `apiMethod` rejected, the error will be piped through this function and the result will be dispatched as `{ACTION_NAME}_FAILURE` (If this is not present, the raw error will be dispatched instead)
 

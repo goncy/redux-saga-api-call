@@ -1,8 +1,8 @@
-import {put, call, select as selectFromState} from 'redux-saga/effects'
+import {put, call, select} from 'redux-saga/effects'
 
 import apiCall from '../src'
 
-const apiMethod = () => Promise.resolve({result: 'foo'})
+const apiMethod = () => Promise.resolve({response: 'foo'})
 
 const action = {
   type: 'MY_ACTION',
@@ -41,7 +41,8 @@ describe('should test redux-saga-api-call flow without options', () => {
     const expected = call(
       apiMethod,
       {
-        payload: action.payload
+        payload: action.payload,
+        selectedData: {}
       }
     )
 
@@ -51,12 +52,12 @@ describe('should test redux-saga-api-call flow without options', () => {
   test('should dispatch a SUCCESS action with the response data', (done) => {
     flow.next()
     flow.next()
-    Promise.resolve({result: 'foo'})
+    Promise.resolve({response: 'foo'})
       .then(data => {
         const actual = flow.next(data).value
         const expected = put({
           type: `${action.type}_SUCCESS`,
-          payload: data.result
+          payload: data.response
         })
 
         expect(actual).toEqual(expected)
@@ -91,7 +92,7 @@ describe('should test redux-saga-api-call flow with options', () => {
       foo: 'bar'
     }
     options = {
-      select: () => selectedDataResponse,
+      selectFromState: () => selectedDataResponse,
       transformResponse: (response) => response + '!',
       transformError: (error) => error + '!'
     },
@@ -108,7 +109,7 @@ describe('should test redux-saga-api-call flow with options', () => {
 
   test('should save the transformed selectedData', () => {
     const actual = flow.next().value
-    const expected = selectFromState(options.select)
+    const expected = select(options.selectFromState)
 
     expect(actual).toEqual(expected)
   })
@@ -133,7 +134,9 @@ describe('should test redux-saga-api-call flow with options', () => {
       apiMethod,
       Object.assign(
         {},
-        selectedDataResponse,
+        {
+          selectedData: selectedDataResponse
+        },
         {
           payload: action.payload
         }
@@ -147,12 +150,12 @@ describe('should test redux-saga-api-call flow with options', () => {
     flow.next()
     flow.next()
     flow.next()
-    Promise.resolve({result: 'foo'})
+    Promise.resolve({response: 'foo'})
       .then(data => {
         const actual = flow.next(data).value
         const expected = put({
           type: `${action.type}_SUCCESS`,
-          payload: options.transformResponse(data.result)
+          payload: options.transformResponse(data.response)
         })
 
         expect(actual).toEqual(expected)

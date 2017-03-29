@@ -1,4 +1,4 @@
-import {put, select as selectFromState, call} from 'redux-saga/effects'
+import {put, select, call} from 'redux-saga/effects'
 
 /**
  * Retrieves data from a passed selector and dispatch an START action with that information, then calls the api with the information merged with the payload, if the api call succedded, dispatches a SUCCESS action with the response on the payload, otherwise, dispatches a FAILURE action with the error
@@ -7,10 +7,11 @@ import {put, select as selectFromState, call} from 'redux-saga/effects'
  * @return {function} generator function that receives the action from the saga
  */
 function apiSaga (apiMethod, options = {}) {
-  const {select, transformResponse, transformError} = options
+  const {selectFromState, transformResponse, transformError} = options
   return function* apiSagaResponse (action) {
-    if (!action) return
-    const selectedData = select ? yield selectFromState(select) : {}
+    const selectedData = selectFromState
+      ? yield select(selectFromState)
+      : {}
 
     yield put({
       type: `${action.type}_START`,
@@ -18,16 +19,32 @@ function apiSaga (apiMethod, options = {}) {
       selectedData
     })
 
-    const {result, error} = yield call(apiMethod, Object.assign({}, selectedData, {payload: action.payload}))
-    if (result) {
-      return yield put({
+    const {response, error} = yield call(
+      apiMethod,
+      Object.assign(
+        {},
+        {
+          selectedData
+        },
+        {
+          payload: action.payload
+        }
+      )
+    )
+
+    if (response) {
+      yield put({
         type: `${action.type}_SUCCESS`,
-        payload: transformResponse ? transformResponse(result) : result
+        payload: transformResponse
+          ? transformResponse(response)
+          : response
       })
-    } else if (error) {
-      return yield put({
+    } else {
+      yield put({
         type: `${action.type}_FAILURE`,
-        payload: transformError ? transformError(error) : error
+        payload: transformError
+          ? transformError(error)
+          : error
       })
     }
   }
