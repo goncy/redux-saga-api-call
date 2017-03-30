@@ -22,14 +22,14 @@ const fetchJokeApi = () => fetch('https://api.chucknorris.io/jokes/random')
 
 // Simplest case
 function* fetchJokeWatcher () {
-  yield takeEvery('FETCH_JOKE', apiSaga(fetchJokeApi))
+  yield takeEvery('FETCH_JOKE', apiCall(fetchJokeApi))
 }
 
 // Select data from state and send it to apiMethod
 function* fetchJokeWatcher () {
   yield takeEvery(
     'FETCH_JOKE',
-    apiSaga(
+    apiCall(
       fetchJokeApi,
       {
         selectFromState: state => state.userPreferences
@@ -43,7 +43,7 @@ function* fetchJokeWatcher () {
 function* fetchJokeWatcher () {
   yield takeEvery(
     'FETCH_JOKE',
-    apiSaga(
+    apiCall(
       fetchJokeApi,
       {
         transformResponse: response => response.filter(joke => !joke.includes('Bruce lee')),
