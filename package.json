@@ -1,6 +1,10 @@
 {
   "name": "redux-saga-api-call",
+<<<<<<< HEAD
   "version": "0.0.2",
+=======
+  "version": "0.0.3",
+>>>>>>> 3dbf304c7b5c4fe2a590fd66a024a3dafefe5eff
   "description": "Simple api call for Redux Saga",
   "main": "dist/redux-saga-api-call.js",
   "module": "dist/redux-saga-api-call.mjs",
