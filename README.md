@@ -20,11 +20,16 @@ const fetchJokeApi = () => fetch('https://api.chucknorris.io/jokes/random')
   .catch(error => ({error}))
 // -> ATTENTION: It's very important to wrap the response and error in objects called response and error, because the call will destructure the response to identify if the call was successfull or not (If you find a way to improve it, please, make a pull request)
 
+...
 // Simplest case
 function* fetchJokeWatcher () {
   yield takeEvery('FETCH_JOKE', apiCall(fetchJokeApi))
 }
+// -> {type: 'FETCH_JOKE_START', payload: <whatever was sent to the action>}
+// -> {type: 'FETCH_JOKE_SUCCESS', payload: <server response>}
+...
 
+...
 // Select data from state and send it to apiMethod
 function* fetchJokeWatcher () {
   yield takeEvery(
@@ -38,7 +43,9 @@ function* fetchJokeWatcher () {
   )
 }
 // -> fetchJokeApi({payload: <payload sent to action>, selectedData: <userPreferences>)
+...
 
+...
 // Transform response and error data
 function* fetchJokeWatcher () {
   yield takeEvery(
@@ -54,6 +61,7 @@ function* fetchJokeWatcher () {
 }
 // -> {type: 'FETCH_JOKE_SUCCESS', payload: <All jokes that doesn't include 'Bruce lee' on it>}
 // -> {type: 'FETCH_JOKE_FAILURE', payload: 'Error: <the error that the server returned>'}
+...
 ```
 
 ### Options
